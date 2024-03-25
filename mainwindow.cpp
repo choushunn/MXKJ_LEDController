@@ -10,7 +10,11 @@ MainWindow::MainWindow(QWidget *parent)
     updateSerialPortList();
     // 连接串口数据接收信号
     connect(&serial, &QSerialPort::readyRead, this, &MainWindow::readSerialData);
+    qRegisterMetaType<QSerialPort::SerialPortError>("MainWindow");
+    connect(&this->serial, &QSerialPort::errorOccurred,this, &MainWindow::handleSerialError);
     iniUI();
+    connect(&checkTimer, SIGNAL(timeout()), this, SLOT(checkSerialPortStatus()));
+    checkTimer.start(1000); // 每秒检查一次串口状态
 }
 
 
@@ -36,6 +40,15 @@ void MainWindow::updateSerialPortList()
     // }
 }
 
+void MainWindow::handleSerialError(QSerialPort::SerialPortError)
+{
+    if(this->serial.error() ==  QSerialPort::ResourceError && this->serial.isOpen())
+    {
+        // emit sig_ShowMsg("请检查串口连接",false);
+        qDebug() <<"错误";
+
+    }
+}
 
 void MainWindow::on_m_btn_connect_clicked()
 {
@@ -44,7 +57,7 @@ void MainWindow::on_m_btn_connect_clicked()
 
     // 根据串口名创建串口对象
     serial.setPortName(portName);
-
+    serial.setBaudRate(115200);
     // 打开串口
     if (serial.open(QIODevice::ReadWrite)) {
         // 串口打开成功，提示连接成功
@@ -59,6 +72,13 @@ void MainWindow::on_m_btn_connect_clicked()
         statusBar()->showMessage("串口连接失败");
     }
 }
+void MainWindow::checkSerialPortStatus()
+{
+    if(!serial.isOpen()){
+        qDebug() <<"错误";
+    }
+}
+
 
 void MainWindow::readSerialData()
 {
@@ -101,5 +121,11 @@ void MainWindow::iniSignalSlots()
 void MainWindow::on_spinBox_valueChanged(int arg1)
 {
 
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    this->updateSerialPortList();
 }
 

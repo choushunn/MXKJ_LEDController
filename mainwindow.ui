@@ -25,7 +25,7 @@
         <widget class="QComboBox" name="comboBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
+           <horstretch>4</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -35,6 +35,13 @@
         <widget class="QPushButton" name="m_btn_connect">
          <property name="text">
           <string>连接</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>刷新</string>
          </property>
         </widget>
        </item>

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSerialPortInfo>
 #include <QSerialPort>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -30,10 +31,15 @@ private slots:
 
     void on_spinBox_valueChanged(int arg1);
 
+    void on_pushButton_clicked();
+    void checkSerialPortStatus();
 private:
     Ui::MainWindow *ui;
     void iniUI();
     void iniSignalSlots();
     bool ledState=false; // LED状态变量
+    void handleSerialError(QSerialPort::SerialPortError);
+    QTimer checkTimer;
+
 };
 #endif // MAINWINDOW_H
